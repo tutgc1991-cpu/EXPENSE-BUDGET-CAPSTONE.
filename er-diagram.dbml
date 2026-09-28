@@ -1,0 +1,49 @@
+Table users {
+  id bigint [pk, increment]
+  full_name varchar(120) [not null]
+  email varchar(255) [not null, unique]
+  password_hash varchar(255) [not null]
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table budgets {
+  id bigint [pk, increment]
+  user_id bigint [not null]
+  name varchar(120) [not null]
+  amount numeric(12,2) [not null]
+  start_date date [not null]
+  end_date date [not null]
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table categories {
+  id bigint [pk, increment]
+  name varchar(80) [not null, unique]
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table expenses {
+  id bigint [pk, increment]
+  budget_id bigint [not null]
+  category_id bigint [not null]
+  amount numeric(12,2) [not null]
+  description varchar(255)
+  expense_date date [not null]
+  created_at timestamptz [not null, default: `now()`]
+}
+
+Table audit_logs {
+  id bigint [pk, increment]
+  table_name varchar(100) [not null]
+  record_id bigint [not null]
+  operation varchar(20) [not null]
+  changed_by bigint
+  old_data jsonb
+  new_data jsonb
+  changed_at timestamptz [not null, default: `now()`]
+}
+
+Ref: users.id < budgets.user_id
+Ref: budgets.id < expenses.budget_id
+Ref: categories.id < expenses.category_id
+Ref: users.id < audit_logs.changed_by

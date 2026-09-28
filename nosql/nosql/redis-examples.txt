@@ -1,0 +1,7 @@
+SET budget:1:summary "{\"budget\":50000,\"spent\":52000,\"remaining\":-2000,\"percentage_used\":104}"
+
+GET budget:1:summary
+
+EXPIRE budget:1:summary 300
+
+DEL budget:1:summary
